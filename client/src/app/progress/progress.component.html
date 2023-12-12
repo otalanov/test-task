@@ -1,0 +1,46 @@
+<div>
+  <div class="controls">
+    <button class="btn" (click)="isPaused = !isPaused">{{ isPaused ? 'Resume' : 'Pause'}}</button>
+      <ng-container *ngIf="maxTimestamp$ | async as maxTimestamp">
+        <button class="btn" (click)="toggleIsLive()">Live</button>
+      </ng-container>
+  </div>
+    <div class="draggable-progress">
+      <ng-container *ngIf="maxTimestamp$ | async as maxTimestamp">
+        <progress [max]="maxTimestamp - minTimestamp" [value]="currentTimestamp - minTimestamp"></progress>
+        <input
+          class="no-default-style color bar gradient"
+          type="range"
+          [min]="minTimestamp"
+          [max]="maxTimestamp$ | async"
+          [step]="TICK_PERIOD"
+          [value]="currentTimestamp"
+          (input)="changeCurrentValue($event)"
+        />
+      </ng-container>
+    </div>
+<!--  <div class="draggable-meter">-->
+<!--    <ng-container *ngIf="maxTimestamp$ | async as maxTimestamp">-->
+<!--      <meter [min]="minTimestamp" [max]="maxTimestamp$ | async" [value]="currentTimestamp"></meter>-->
+<!--      <input-->
+<!--        class="no-default-style color bar gradient"-->
+<!--        type="range"-->
+<!--        [min]="minTimestamp"-->
+<!--        [max]="maxTimestamp$ | async"-->
+<!--        [step]="TICK_PERIOD"-->
+<!--        [value]="currentTimestamp"-->
+<!--        (input)="changeCurrentValue($event)"-->
+<!--      />-->
+<!--    </ng-container>-->
+<!--  </div>-->
+
+  <p class="description">
+    Active Timestamp Snapshot: <i>{{ currentTimestamp }}</i>
+  </p>
+  <p class="description">
+    Zero point Timestamp: <i>{{ minTimestamp }}</i>
+  </p>
+  <p class="description">
+    Current Timestamp (live): <i>{{ maxTimestamp$ | async }}</i>
+  </p>
+</div>

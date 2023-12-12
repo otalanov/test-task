@@ -1,0 +1,116 @@
+
+progress::-webkit-progress-bar {
+  background-color: #d5ecff;
+}
+progress::-webkit-progress-value {
+  background-color: #ff5757;
+}
+progress::-moz-progress-bar {
+  background-color: #ff5757;
+}
+
+p.description {
+  font-size: 12px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0 5px;
+}
+
+.btn {
+  color: white;
+  background-color: #00539b;
+  border: 0;
+  padding: 6px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.draggable-progress {
+  position: relative;
+  vertical-align: top;
+  padding: 0;
+  margin: 0;
+  border: none;
+  height: 12px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+.draggable-progress > progress {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  height: 20px;
+  cursor: pointer;
+}
+.draggable-progress > input[type=range] {
+  -webkit-appearance: none;
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  width: 100%;
+  height: 20px;
+  margin: 0 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+.draggable-progress > input[type=range]:focus {
+  outline: none;
+}
+.draggable-progress > input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  cursor: pointer;
+  background-color: transparent;
+}
+.draggable-progress > input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  background-color: transparent;
+  cursor: pointer;
+  margin-top: 0;
+}
+.draggable-progress > input[type=range]:focus::-webkit-slider-runnable-track {
+  background-color: transparent;
+}
+.draggable-progress > input[type=range]::-moz-range-track {
+  width: 100%;
+  cursor: pointer;
+  background-color: transparent;
+}
+.draggable-progress > input[type=range]::-moz-range-thumb {
+  width: 10px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+.draggable-progress > input[type=range]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+  background-color: transparent;
+  color: transparent;
+}
+.draggable-progress > input[type=range]::-ms-fill-lower {
+  background-color: transparent;
+}
+.draggable-progress > input[type=range]::-ms-fill-upper {
+  background-color: transparent;
+}
+.draggable-progress > input[type=range]::-ms-thumb {
+  width: 10px;
+  background-color: transparent;
+  cursor: pointer;
+}
+.draggable-progress > input[type=range]:focus::-ms-fill-lower {
+  background-color: transparent;
+}
+.draggable-progress > input[type=range]:focus::-ms-fill-upper {
+  background-color: transparent;
+}
