@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {interval, Subject, Subscription} from "rxjs";
 import {CommonModule} from "@angular/common";
 
@@ -13,7 +13,6 @@ export class ProgressComponent implements OnInit, OnDestroy {
   @Input() minTimestamp: number = 0;
   @Output() currentTimestampChanged: EventEmitter<number> = new EventEmitter<number>();
   maxTimestamp$: Subject<number> = new Subject<number>();
-  // currentTimestamp$: Subject<Number> = new Subject<Number>();
   currentTimestamp: number = Date.now();
   isPaused: Boolean = false;
   isLive: Boolean = true;
