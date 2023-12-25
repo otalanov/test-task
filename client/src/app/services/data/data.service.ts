@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {Observable, of, Subscriber, Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import { EventTypes } from '../../../assets/enums/worker.enum';
 import {NgxIndexedDBService} from "ngx-indexed-db";
 import {environment} from "../../../environments/environment";

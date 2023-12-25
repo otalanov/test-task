@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, interval, Observable, of, Subject, Subscription} from "rxjs";
+import {BehaviorSubject, interval, Observable, Subject, Subscription} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,7 @@ export class DatetimeService implements OnDestroy {
   private minTimestampSub: BehaviorSubject<number> = new BehaviorSubject(0);
   private isPausedSub: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private isLiveSub: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  private MIN_TIMESTAMP_HOURS_OFFSET = 12;
 
   constructor() {
     this.init();
@@ -41,7 +42,7 @@ export class DatetimeService implements OnDestroy {
 
   private initMinTimestamp(): void {
     let now: Date = new Date();
-    this.minTimestampSub.next(now.setHours(now.getHours() - 12));
+    this.minTimestampSub.next(now.setHours(now.getHours() - this.MIN_TIMESTAMP_HOURS_OFFSET));
   }
 
   public getMaxTimestamp(): Observable<number> {

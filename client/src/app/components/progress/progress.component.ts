@@ -1,6 +1,5 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {BehaviorSubject, interval, Observable, Subject, Subscription} from "rxjs";
-import {CommonModule} from "@angular/common";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Subscription} from "rxjs";
 import {DatetimeService} from "../../services/datetime/datetime.service";
 
 @Component({
