@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, interval, Observable, of, Subject, Subscription} from "rxjs";
+import {BehaviorSubject, interval, Observable, Subject, Subscription} from "rxjs";
 
 @Injectable({
   providedIn: 'root'

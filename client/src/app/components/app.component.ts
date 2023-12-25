@@ -1,12 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {RouterOutlet} from '@angular/router';
-import {mergeMap, Subject, Subscription} from "rxjs";
-import {ProgressComponent} from "./progress/progress.component";
-import {DataService} from "../services/data/data.service";
+import {mergeMap, Subscription} from "rxjs";
 import {SignalsService} from "../services/signals/signals.service";
 import {DatetimeService} from "../services/datetime/datetime.service";
-import * as process from "process";
 
 @Component({
   selector: 'app-root',
