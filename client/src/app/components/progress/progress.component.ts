@@ -1,58 +1,55 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {interval, Subject, Subscription} from "rxjs";
+import {BehaviorSubject, interval, Observable, Subject, Subscription} from "rxjs";
 import {CommonModule} from "@angular/common";
+import {DatetimeService} from "../../services/datetime/datetime.service";
 
 @Component({
   selector: 'app-progress',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: './progress.component.html',
-  styleUrl: './progress.component.css'
+  styleUrl: './progress.component.scss'
 })
 export class ProgressComponent implements OnInit, OnDestroy {
-  @Input() minTimestamp: number = 0;
-  @Output() currentTimestampChanged: EventEmitter<number> = new EventEmitter<number>();
-  maxTimestamp$: Subject<number> = new Subject<number>();
   currentTimestamp: number = Date.now();
-  isPaused: Boolean = false;
-  isLive: Boolean = true;
+  maxTimestamp: number = Date.now();
+  minTimestamp: number = 0;
+  isPaused: boolean = false;
+  isLive: boolean = true;
   subscriptions: Subscription[] = [];
-  TICK_PERIOD: number = 500;
+  STEP: Number = 500;
 
+  constructor(private datetimeService: DatetimeService) {
+  }
   ngOnInit(): void {
-    const tick = interval(this.TICK_PERIOD);
-    let maxProgressSub = tick.subscribe(() => {
-      this.maxTimestamp$.next(Date.now());
-      if (this.isPaused) {
-        this.isLive = false;
-      }
-      if (this.isLive) {
-        this.isPaused = false;
-        this.currentTimestamp = Date.now();
-        this.maxTimestamp$.next(this.currentTimestamp);
-        this.currentTimestampChanged.emit(this.currentTimestamp);
-      } else {
-        this.maxTimestamp$.next(Date.now());
-        if (!this.isPaused) {
-          this.currentTimestamp += this.TICK_PERIOD;
-          this.currentTimestampChanged.emit(this.currentTimestamp);
-        }
-      }
-    })
-    this.subscriptions.push(maxProgressSub);
+    let currentTimestampSubscription = this.datetimeService.getCurrentTimestamp()
+      .subscribe(res => this.currentTimestamp = res);
+    let maxTimestampSubscription = this.datetimeService.getMaxTimestamp()
+      .subscribe(res => this.maxTimestamp = res);
+    let minTimestampSubscription = this.datetimeService.getMinTimestamp()
+      .subscribe(res => this.minTimestamp = res);
+    let isPausedSubscription = this.datetimeService.getIsPaused()
+      .subscribe(res => this.isPaused = res);
+    let isLiveSubscription = this.datetimeService.getIsLive()
+      .subscribe(res => this.isLive = res);
+    this.subscriptions.push(currentTimestampSubscription,
+                            maxTimestampSubscription,
+                            minTimestampSubscription,
+                            isPausedSubscription,
+                            isLiveSubscription)
   }
 
   changeCurrentValue(event: any) {
-    this.isPaused = true;
-    this.currentTimestamp = Number(event.target.value);
-    this.currentTimestampChanged.emit(this.currentTimestamp);
+    this.datetimeService.setIsPaused(true);
+    this.datetimeService.setCurrentTimestamp(Number(event.target.value));
   }
 
-  toggleIsLive() {
-    this.isLive = !this.isLive;
-    if (this.isLive) {
-      this.isPaused = false;
-    }
+  toggleIsPaused(){
+    console.log(this.isPaused)
+    this.datetimeService.setIsPaused(!this.isPaused)
+  }
+
+  goLive() {
+    this.datetimeService.setIsPaused(false);
+    this.datetimeService.setIsLive(true)
   }
 
   ngOnDestroy(): void {

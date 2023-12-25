@@ -14,7 +14,7 @@ wss.on('connection', ws => {
     let interval = setInterval(() => {
         generateData(ws);
         counter++;
-        if (counter > 139) {
+        if (counter > 19) {
             clearInterval(interval)
         }
     }, 400)

@@ -29,6 +29,10 @@ p.description {
   border-radius: 4px;
 }
 
+.btn[disabled] {
+  background-color: gray;
+}
+
 .draggable-progress {
   position: relative;
   vertical-align: top;
