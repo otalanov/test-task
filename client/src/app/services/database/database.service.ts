@@ -8,7 +8,7 @@ import {environment} from "../../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
-export class DataService implements OnDestroy {
+export class DatabaseService implements OnDestroy {
 
   protected socketURI: string = environment.serverAddress;
 
@@ -37,7 +37,7 @@ export class DataService implements OnDestroy {
   // }
 
   getData(storeName: string, indexName: string, keyRange: number): Observable<any> {
-    // current implementation relies on the fact that we only need data <= than current timestamp
+    // current implementation relies on the fact that we only need database <= than current timestamp
     // that is why we use upperbound. but this method should be more flexible to handle various kind of filters
     return this.dbService.getAllByIndex(storeName, indexName, IDBKeyRange.upperBound(keyRange));
   }
@@ -47,8 +47,11 @@ export class DataService implements OnDestroy {
       let sub = this.dbService.add('signals', JSON.parse(event.data)).subscribe((key) => {});
       this.subscriptions.push(sub)
     }
-    // this.workerSubscriber?.next(event?.data);
+    // this.workerSubscriber?.next(event?.database);
+  }
 
+  getCurrentTimestamp(): number {
+    return Date.now();
   }
 
   ngOnDestroy() {

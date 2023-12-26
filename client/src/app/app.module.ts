@@ -6,7 +6,7 @@ import { AppComponent } from './components/app.component';
 import { NgxIndexedDBModule } from 'ngx-indexed-db';
 import {RouterOutlet} from "@angular/router";
 import {ProgressComponent} from "./components/progress/progress.component";
-import {DataService} from "./services/data/data.service";
+import {DatabaseService} from "./services/database/database.service";
 import {dbConfig} from "./dbconfig";
 
 
@@ -21,7 +21,7 @@ import {dbConfig} from "./dbconfig";
     NgxIndexedDBModule.forRoot(dbConfig),
     RouterOutlet
   ],
-  providers: [DataService],
+  providers: [DatabaseService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

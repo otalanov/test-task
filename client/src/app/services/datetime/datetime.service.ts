@@ -1,5 +1,6 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, interval, Observable, Subject, Subscription} from "rxjs";
+import {BehaviorSubject, interval, Observable, Subscription} from "rxjs";
+import {DatabaseService} from "../database/database.service";
 
 @Injectable({
   providedIn: 'root'
@@ -8,13 +9,13 @@ export class DatetimeService implements OnDestroy {
   public TICK_PERIOD: number = 500;
   private subscriptions: Subscription[] = [];
   private currentTimestampSub: BehaviorSubject<number> = new BehaviorSubject<number>(Date.now());
-  private maxTimestampSub: Subject<number> = new Subject();
+  private maxTimestampSub: BehaviorSubject<number> = new BehaviorSubject(0);
   private minTimestampSub: BehaviorSubject<number> = new BehaviorSubject(0);
   private isPausedSub: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private isLiveSub: BehaviorSubject<boolean> = new BehaviorSubject(true);
   private MIN_TIMESTAMP_HOURS_OFFSET = 12;
 
-  constructor() {
+  constructor(private databaseService: DatabaseService) {
     this.init();
   }
 
@@ -22,22 +23,54 @@ export class DatetimeService implements OnDestroy {
     this.initMinTimestamp();
     const tick = interval(this.TICK_PERIOD);
     let maxProgressSub = tick.subscribe(() => {
-      this.maxTimestampSub.next(Date.now());
-      if (this.isPausedSub.getValue()) {
-        this.isLiveSub.next(false);
+      this.maxTimestamp = Date.now();
+      if (this.isPaused) {
+        this.isLive = false;
       }
-      if (this.isLiveSub.getValue()) {
-        this.isPausedSub.next(false);
-        this.currentTimestampSub.next(Date.now());
-        this.maxTimestampSub.next(Date.now());
+      if (this.isLive) {
+        this.isPaused = false;
+        this.syncFetchCurrentTimestamp();
+        this.maxTimestamp = Date.now();
       } else {
-        this.maxTimestampSub.next(Date.now());
-        if (!this.isPausedSub.getValue()) {
-          this.currentTimestampSub.next(this.currentTimestampSub.getValue() + this.TICK_PERIOD);
+        this.maxTimestamp = Date.now();
+        if (!this.isPaused) {
+          this.currentTimestamp = this.currentTimestamp + this.TICK_PERIOD;
         }
       }
     })
     this.subscriptions.push(maxProgressSub);
+  }
+
+  private set isPaused(value: boolean) {
+    this.isPausedSub.next(value);
+  }
+
+  private set isLive(value: boolean) {
+    this.isLiveSub.next(value);
+  }
+
+  private set maxTimestamp(value: number) {
+    this.maxTimestampSub.next(value);
+  }
+
+  private set currentTimestamp(value: number) {
+    this.currentTimestampSub.next(value);
+  }
+
+  private get isPaused(): boolean {
+    return this.isPausedSub.getValue();
+  }
+
+  private get isLive(): boolean {
+    return this.isLiveSub.getValue();
+  }
+
+  private get maxTimestamp(): number {
+    return this.maxTimestampSub.getValue();
+  }
+
+  private get currentTimestamp(): number {
+    return this.currentTimestampSub.getValue();
   }
 
   private initMinTimestamp(): void {
@@ -75,6 +108,10 @@ export class DatetimeService implements OnDestroy {
 
   public setCurrentTimestamp(value: number): void {
     this.currentTimestampSub.next(value);
+  }
+
+  private syncFetchCurrentTimestamp(): void {
+    this.currentTimestamp = this.databaseService.getCurrentTimestamp();
   }
 
   public ngOnDestroy(): void {
